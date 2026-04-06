@@ -30,10 +30,9 @@ def cached_dataset():
 @st.cache_resource
 def cached_artifacts():
     if not MODEL_PATH.exists():
-        st.error("Model file not found. Run `python train.py` first.")
-        st.stop()
+        from src.model_utils import train_and_save_model
+        train_and_save_model()
     return load_model_artifacts()
-
 
 def show_overview(df: pd.DataFrame, metadata: dict):
     st.subheader("Project Summary")
