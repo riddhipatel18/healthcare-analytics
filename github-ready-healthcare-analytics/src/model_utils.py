@@ -50,16 +50,18 @@ def get_model_candidates() -> dict:
             class_weight="balanced",
             random_state=RANDOM_STATE,
         ),
+
         "random_forest": RandomForestClassifier(
-            n_estimators=350,
+            n_estimators=100,   # 🔽 reduced from 350
             min_samples_split=4,
             min_samples_leaf=2,
             class_weight="balanced_subsample",
             random_state=RANDOM_STATE,
             n_jobs=-1,
         ),
+
         "extra_trees": ExtraTreesClassifier(
-            n_estimators=400,
+            n_estimators=100,   # 🔽 reduced from 400
             min_samples_split=4,
             min_samples_leaf=2,
             class_weight="balanced",
