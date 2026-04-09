@@ -5,6 +5,10 @@ import io
 import pandas as pd
 import streamlit as st
 
+from src.model_utils import train_and_save_model
+from src.config import MODEL_PATH
+import os
+
 from src.config import APP_SUBTITLE, APP_TITLE, FEATURES, MODEL_PATH, NUMERIC_FEATURES
 from src.data_utils import load_dataset
 from src.model_utils import load_model_artifacts, predict_dataframe
