@@ -33,10 +33,14 @@ def cached_dataset():
 
 @st.cache_resource
 def cached_artifacts():
-    if not MODEL_PATH.exists():
+    try:
+        return load_model_artifacts()
+    except Exception as e:
+        import streamlit as st
+        st.warning("Model corrupted or incompatible. Re-training... ⏳")
         from src.model_utils import train_and_save_model
         train_and_save_model()
-    return load_model_artifacts()
+        return load_model_artifacts()
 
 def show_overview(df: pd.DataFrame, metadata: dict):
     st.subheader("Project Summary")
@@ -172,9 +176,15 @@ def show_batch_prediction(pipeline):
             mime="text/csv",
         )
 
-
 def main():
     df = cached_dataset()
+
+    # ✅ Auto-train if model missing (GitHub-only solution)
+    if not os.path.exists(MODEL_PATH):
+        st.warning("Model not found. Training model... please wait ⏳")
+        train_and_save_model()
+
+    # ✅ Load model
     pipeline, metadata = cached_artifacts()
 
     st.title(APP_TITLE)
@@ -198,7 +208,6 @@ def main():
         show_single_prediction(pipeline)
     with batch_tab:
         show_batch_prediction(pipeline)
-
 
 if __name__ == "__main__":
     main()
